@@ -22,4 +22,11 @@ test('new users can register', function () {
 
     assertAuthenticated();
     $response->assertRedirect(route('dashboard', absolute: false));
+
+    $this->assertDatabaseCount('users', 1);
+    $user = \App\Models\User::query()->first();
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertOk();
 });
