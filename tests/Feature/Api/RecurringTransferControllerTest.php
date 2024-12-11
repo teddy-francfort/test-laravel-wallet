@@ -40,3 +40,18 @@ test('a recurring transfer can be delete', function () {
 
     $this->assertDatabaseCount('recurring_transfers', 0);
 });
+
+test('a recurring transfer cannot be deleted by another user', function () {
+    $user = User::factory()->create();
+    $anotherUser = User::factory()->create();
+    $recurringTransfer = RecurringTransfer::factory()->create(['user_id' => $user->id]);
+
+    $this->assertDatabaseCount('recurring_transfers', 1);
+
+    $route = route('recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
+    $response = $this->actingAs($anotherUser)->deleteJson($route);
+
+    $response->assertForbidden();
+
+    $this->assertDatabaseCount('recurring_transfers', 1);
+});

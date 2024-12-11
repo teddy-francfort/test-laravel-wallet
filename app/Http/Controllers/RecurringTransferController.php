@@ -8,6 +8,7 @@ use App\Http\Requests\CreateRecurringTransferRequest;
 use App\Models\RecurringTransfer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class RecurringTransferController
 {
@@ -65,8 +66,10 @@ class RecurringTransferController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RecurringTransfer $recurringTransfer)
+    public function destroy(Request $request, RecurringTransfer $recurringTransfer)
     {
+        Gate::authorize('delete', $recurringTransfer);
+
         $recurringTransfer->delete();
 
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
