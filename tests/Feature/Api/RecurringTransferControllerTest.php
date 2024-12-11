@@ -33,10 +33,10 @@ test('a recurring transfer can be delete', function () {
 
     $this->assertDatabaseCount('recurring_transfers', 1);
 
-    $route = route('recurringtransfers.destroy', ['recurringtransfer' => $recurringTransfer]);
+    $route = route('recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
     $response = $this->actingAs($user)->deleteJson($route);
 
     $response->assertStatus(204);
 
     $this->assertDatabaseCount('recurring_transfers', 0);
-})->skip();
+});
