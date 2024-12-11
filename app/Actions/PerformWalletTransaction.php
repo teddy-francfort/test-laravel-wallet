@@ -9,6 +9,7 @@ use App\Exceptions\InsufficientBalance;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
 use App\Models\WalletTransfer;
+use App\Notifications\BalanceLowNotification;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -46,6 +47,13 @@ readonly class PerformWalletTransaction
             $wallet->increment('balance', $amount);
         } else {
             $wallet->decrement('balance', $amount);
+        }
+
+        // Send a notification to user if balance is low
+        // The value could be set in a config file
+        // Maybe dispatch an event and handle this in a listener
+        if ($wallet->balance < 10) {
+            $wallet->user->notify(new BalanceLowNotification);
         }
     }
 
