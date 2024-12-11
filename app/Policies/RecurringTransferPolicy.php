@@ -22,7 +22,7 @@ class RecurringTransferPolicy
      */
     public function view(User $user, RecurringTransfer $recurringTransfer): bool
     {
-        return false;
+        return $recurringTransfer->user()->is($user);
     }
 
     /**

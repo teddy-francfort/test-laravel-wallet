@@ -42,9 +42,11 @@ class RecurringTransferController
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(RecurringTransfer $recurringTransfer)
     {
-        //
+        Gate::authorize('view', $recurringTransfer);
+
+        return new JsonResponse($recurringTransfer);
     }
 
     /**
