@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/v1/login', LoginController::class)->middleware(['guest:sanctum', 'throttle:api.login']);
 
-Route::middleware(['auth:sanctum', 'throttle:api'])->prefix('v1')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api'])->prefix('v1')->name('api.')->group(function () {
     Route::get('/account', AccountController::class);
     Route::post('/wallet/send-money', SendMoneyController::class);
     Route::resource('recurringtransfers', RecurringTransferController::class)

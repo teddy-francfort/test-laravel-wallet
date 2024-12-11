@@ -19,7 +19,7 @@ test('a recurring transfer can be created', function () {
         'reason' => 'test reason',
     ];
 
-    $response = $this->actingAs($user)->postJson(route('recurringtransfers.store'), $data);
+    $response = $this->actingAs($user)->postJson(route('api.recurringtransfers.store'), $data);
 
     $response->assertStatus(201);
 
@@ -33,7 +33,7 @@ test('a recurring transfer can be delete', function () {
 
     $this->assertDatabaseCount('recurring_transfers', 1);
 
-    $route = route('recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
+    $route = route('api.recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
     $response = $this->actingAs($user)->deleteJson($route);
 
     $response->assertStatus(204);
@@ -48,7 +48,7 @@ test('a recurring transfer cannot be deleted by another user', function () {
 
     $this->assertDatabaseCount('recurring_transfers', 1);
 
-    $route = route('recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
+    $route = route('api.recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
     $response = $this->actingAs($anotherUser)->deleteJson($route);
 
     $response->assertForbidden();
@@ -60,7 +60,7 @@ test('a recurring transfer can be retrieved', function () {
     $user = User::factory()->create();
     $recurringTransfer = RecurringTransfer::factory()->create(['user_id' => $user->id]);
 
-    $route = route('recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
+    $route = route('api.recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
     $response = $this->actingAs($user)->getJson($route);
 
     $response->assertStatus(200);
@@ -73,7 +73,7 @@ test('a recurring transfer cannot be retrieved by another user', function () {
 
     $this->assertDatabaseCount('recurring_transfers', 1);
 
-    $route = route('recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
+    $route = route('api.recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
     $response = $this->actingAs($anotherUser)->getJson($route);
 
     $response->assertForbidden();
