@@ -15,6 +15,9 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('recurringtransfers.index')" :active="request()->routeIs('recurring_transfer')">
+                        {{ __('Recurring transfers') }}
+                    </x-nav-link>
                 </div>
             </div>
 

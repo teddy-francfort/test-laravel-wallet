@@ -9,15 +9,18 @@ use App\Models\RecurringTransfer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\View\View;
 
 class RecurringTransferController
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): View
     {
-        //
+        $recurringTransfers = $request->user()->recurringTransfers()->orderByDesc('id')->get();
+
+        return view('recurring_transfers', compact('recurringTransfers'));
     }
 
     /**
@@ -36,7 +39,9 @@ class RecurringTransferController
         $data = array_merge($request->validated(), ['user_id' => $request->user()->id]);
         $recurringTransfer = RecurringTransfer::query()->create($data);
 
-        return new JsonResponse($recurringTransfer, JsonResponse::HTTP_CREATED);
+        return ($request->expectsJson()) ?
+            new JsonResponse($recurringTransfer, JsonResponse::HTTP_CREATED)
+            : redirect()->back()->with('recurring-transfer-status', 'created');
     }
 
     /**
@@ -58,6 +63,8 @@ class RecurringTransferController
 
         $recurringTransfer->delete();
 
-        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+        return ($request->expectsJson()) ?
+            new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT)
+            : redirect()->back()->with('recurring-transfer-status', 'deleted');
     }
 }
