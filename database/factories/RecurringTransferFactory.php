@@ -19,7 +19,12 @@ class RecurringTransferFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'start_date' => now(),
+            'end_date' => now()->addMonth(),
+            'frequency' => 10,
+            'recipient_email' => 'test@test.com',
+            'amount' => 10,
+            'reason' => 'test reason',
         ];
     }
 }

@@ -65,8 +65,10 @@ class RecurringTransferController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(RecurringTransfer $recurringTransfer)
     {
-        //
+        $recurringTransfer->delete();
+
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 }

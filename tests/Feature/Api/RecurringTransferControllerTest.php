@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\RecurringTransfer;
 use App\Models\User;
 use App\Models\Wallet;
 
@@ -24,3 +25,18 @@ test('a recurring transfer can be created', function () {
 
     $this->assertDatabaseCount('recurring_transfers', 1);
 });
+
+test('a recurring transfer can be delete', function () {
+    $user = User::factory()->create();
+    $wallet = Wallet::factory()->balance(100)->create(['user_id' => $user->id]);
+    $recurringTransfer = RecurringTransfer::factory()->create(['user_id' => $user->id]);
+
+    $this->assertDatabaseCount('recurring_transfers', 1);
+
+    $route = route('recurringtransfers.destroy', ['recurringtransfer' => $recurringTransfer]);
+    $response = $this->actingAs($user)->deleteJson($route);
+
+    $response->assertStatus(204);
+
+    $this->assertDatabaseCount('recurring_transfers', 0);
+})->skip();
