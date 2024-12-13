@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
+use App\Models\Wallet;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -15,9 +16,18 @@ class BalanceLowNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
-    {
+    public function __construct(
+        public Wallet $wallet,
+    ) {
         //
+    }
+
+    /**
+     * Determine if the notification should be sent.
+     */
+    public function shouldSend(object $notifiable, string $channel): bool
+    {
+        return $this->wallet->isBalanceLow();
     }
 
     /**

@@ -35,4 +35,9 @@ class Wallet extends Model
     {
         return $this->hasMany(WalletTransaction::class);
     }
+
+    public function isBalanceLow(): bool
+    {
+        return $this->balance < config('wallet.balance_low_level');
+    }
 }

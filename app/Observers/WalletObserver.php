@@ -15,7 +15,7 @@ class WalletObserver
     public function updated(Wallet $wallet): void
     {
         if ($wallet->wasChanged('balance')) {
-            if ($wallet->balance < config('wallet.balance_low_level')) {
+            if ($wallet->isBalanceLow()) {
                 WalletBalanceLowEvent::dispatch($wallet);
             }
         }
