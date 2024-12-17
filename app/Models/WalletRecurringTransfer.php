@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class RecurringTransfer extends Model
+class WalletRecurringTransfer extends Model
 {
-    /** @use HasFactory<\Database\Factories\RecurringTransferFactory> */
+    /** @use HasFactory<\Database\Factories\WalletRecurringTransferFactory> */
     use HasFactory;
 
     protected $table = 'wallet_recurring_transfers';

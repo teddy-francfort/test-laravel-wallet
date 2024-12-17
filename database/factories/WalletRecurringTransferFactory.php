@@ -7,9 +7,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RecurringTransfer>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\WalletRecurringTransfer>
  */
-class RecurringTransferFactory extends Factory
+class WalletRecurringTransferFactory extends Factory
 {
     /**
      * Define the model's default state.

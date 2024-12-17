@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use App\Models\RecurringTransfer;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Models\WalletRecurringTransfer;
 
 use function Pest\Laravel\actingAs;
 
 test('recurring transfers page is displayed', function () {
     $user = User::factory()->has(Wallet::factory()->richChillGuy())->create();
     $wallet = Wallet::factory()->richChillGuy()->for($user)->create();
-    $recurringTransfers = RecurringTransfer::factory()->for($wallet)->create();
+    $recurringTransfers = WalletRecurringTransfer::factory()->for($wallet)->create();
 
     $response = actingAs($user)->get(route('recurringtransfers.index'));
 
@@ -69,7 +69,7 @@ test('delete a recurring transfer', function () {
         'reason' => 'test reason',
     ];
 
-    $recurringTransfer = RecurringTransfer::factory()->create($data);
+    $recurringTransfer = WalletRecurringTransfer::factory()->create($data);
 
     actingAs($user)->get(route('recurringtransfers.index'))
         ->assertSeeTextInOrder([

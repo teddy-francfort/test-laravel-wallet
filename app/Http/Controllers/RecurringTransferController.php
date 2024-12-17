@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateRecurringTransferRequest;
-use App\Models\RecurringTransfer;
+use App\Models\WalletRecurringTransfer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -38,7 +38,7 @@ class RecurringTransferController
     {
         $data = array_merge($request->validated(), ['source_id' => $request->user()->wallet->id]);
         //dd($data);
-        $recurringTransfer = RecurringTransfer::query()->create($data);
+        $recurringTransfer = WalletRecurringTransfer::query()->create($data);
 
         return ($request->expectsJson()) ?
             new JsonResponse($recurringTransfer, JsonResponse::HTTP_CREATED)
@@ -48,7 +48,7 @@ class RecurringTransferController
     /**
      * Display the specified resource.
      */
-    public function show(RecurringTransfer $recurringTransfer)
+    public function show(WalletRecurringTransfer $recurringTransfer)
     {
         Gate::authorize('view', $recurringTransfer);
 
@@ -58,7 +58,7 @@ class RecurringTransferController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, RecurringTransfer $recurringTransfer)
+    public function destroy(Request $request, WalletRecurringTransfer $recurringTransfer)
     {
         Gate::authorize('delete', $recurringTransfer);
 
