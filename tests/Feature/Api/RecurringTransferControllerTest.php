@@ -23,42 +23,44 @@ test('a recurring transfer can be created', function () {
 
     $response->assertStatus(201);
 
-    $this->assertDatabaseCount('recurring_transfers', 1);
+    $this->assertDatabaseCount('wallet_recurring_transfers', 1);
 });
 
 test('a recurring transfer can be delete', function () {
     $user = User::factory()->create();
-    $wallet = Wallet::factory()->balance(100)->create(['user_id' => $user->id]);
-    $recurringTransfer = RecurringTransfer::factory()->create(['user_id' => $user->id]);
+    $wallet = Wallet::factory()->balance(100)->for($user)->create();
+    $recurringTransfer = RecurringTransfer::factory()->for($wallet)->create();
 
-    $this->assertDatabaseCount('recurring_transfers', 1);
+    $this->assertDatabaseCount('wallet_recurring_transfers', 1);
 
     $route = route('api.recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
     $response = $this->actingAs($user)->deleteJson($route);
 
     $response->assertStatus(204);
 
-    $this->assertDatabaseCount('recurring_transfers', 0);
+    $this->assertDatabaseCount('wallet_recurring_transfers', 0);
 });
 
 test('a recurring transfer cannot be deleted by another user', function () {
     $user = User::factory()->create();
+    $wallet = Wallet::factory()->balance(100)->for($user)->create();
     $anotherUser = User::factory()->create();
-    $recurringTransfer = RecurringTransfer::factory()->create(['user_id' => $user->id]);
+    $recurringTransfer = RecurringTransfer::factory()->for($wallet)->create();
 
-    $this->assertDatabaseCount('recurring_transfers', 1);
+    $this->assertDatabaseCount('wallet_recurring_transfers', 1);
 
     $route = route('api.recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
     $response = $this->actingAs($anotherUser)->deleteJson($route);
 
     $response->assertForbidden();
 
-    $this->assertDatabaseCount('recurring_transfers', 1);
+    $this->assertDatabaseCount('wallet_recurring_transfers', 1);
 });
 
 test('a recurring transfer can be retrieved', function () {
     $user = User::factory()->create();
-    $recurringTransfer = RecurringTransfer::factory()->create(['user_id' => $user->id]);
+    $wallet = Wallet::factory()->balance(100)->for($user)->create();
+    $recurringTransfer = RecurringTransfer::factory()->for($wallet)->create();
 
     $route = route('api.recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
     $response = $this->actingAs($user)->getJson($route);
@@ -68,10 +70,11 @@ test('a recurring transfer can be retrieved', function () {
 
 test('a recurring transfer cannot be retrieved by another user', function () {
     $user = User::factory()->create();
+    $wallet = Wallet::factory()->balance(100)->for($user)->create();
     $anotherUser = User::factory()->create();
-    $recurringTransfer = RecurringTransfer::factory()->create(['user_id' => $user->id]);
+    $recurringTransfer = RecurringTransfer::factory()->for($wallet)->create();
 
-    $this->assertDatabaseCount('recurring_transfers', 1);
+    $this->assertDatabaseCount('wallet_recurring_transfers', 1);
 
     $route = route('api.recurringtransfers.destroy', ['recurringTransfer' => $recurringTransfer]);
     $response = $this->actingAs($anotherUser)->getJson($route);

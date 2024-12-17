@@ -40,4 +40,9 @@ class Wallet extends Model
     {
         return $this->balance < config('wallet.balance_low_level');
     }
+
+    public function recurringTransfers(): HasMany
+    {
+        return $this->hasMany(RecurringTransfer::class, 'source_id');
+    }
 }

@@ -18,7 +18,7 @@ class RecurringTransferController
      */
     public function index(Request $request): View
     {
-        $recurringTransfers = $request->user()->recurringTransfers()->orderByDesc('id')->get();
+        $recurringTransfers = $request->user()->wallet->recurringTransfers()->orderByDesc('id')->get();
 
         return view('recurring_transfers', compact('recurringTransfers'));
     }
@@ -36,7 +36,8 @@ class RecurringTransferController
      */
     public function store(CreateRecurringTransferRequest $request)
     {
-        $data = array_merge($request->validated(), ['user_id' => $request->user()->id]);
+        $data = array_merge($request->validated(), ['source_id' => $request->user()->wallet->id]);
+        //dd($data);
         $recurringTransfer = RecurringTransfer::query()->create($data);
 
         return ($request->expectsJson()) ?

@@ -13,8 +13,10 @@ class RecurringTransfer extends Model
     /** @use HasFactory<\Database\Factories\RecurringTransferFactory> */
     use HasFactory;
 
+    protected $table = 'wallet_recurring_transfers';
+
     protected $fillable = [
-        'user_id',
+        'source_id',
         'start_date',
         'end_date',
         'frequency',
@@ -23,8 +25,8 @@ class RecurringTransfer extends Model
         'reason',
     ];
 
-    public function user(): BelongsTo
+    public function wallet(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Wallet::class, 'source_id');
     }
 }

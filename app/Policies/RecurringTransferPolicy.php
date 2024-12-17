@@ -14,7 +14,7 @@ class RecurringTransferPolicy
      */
     public function view(User $user, RecurringTransfer $recurringTransfer): bool
     {
-        return $recurringTransfer->user()->is($user);
+        return $recurringTransfer->wallet->user->is($user);
     }
 
     /**
@@ -22,6 +22,6 @@ class RecurringTransferPolicy
      */
     public function delete(User $user, RecurringTransfer $recurringTransfer): bool
     {
-        return $recurringTransfer->user()->is($user);
+        return $recurringTransfer->wallet->user->is($user);
     }
 }

@@ -11,7 +11,7 @@ use function Pest\Laravel\actingAs;
 test('recurring transfers page is displayed', function () {
     $user = User::factory()->has(Wallet::factory()->richChillGuy())->create();
     $wallet = Wallet::factory()->richChillGuy()->for($user)->create();
-    $recurringTransfers = RecurringTransfer::factory()->for($user)->create();
+    $recurringTransfers = RecurringTransfer::factory()->for($wallet)->create();
 
     $response = actingAs($user)->get(route('recurringtransfers.index'));
 
@@ -60,7 +60,7 @@ test('delete a recurring transfer', function () {
     $user = User::factory()->has(Wallet::factory()->richChillGuy())->create();
 
     $data = [
-        'user_id' => $user->id,
+        'source_id' => $user->wallet->id,
         'start_date' => now(),
         'end_date' => now()->addDays(30),
         'frequency' => 10,
