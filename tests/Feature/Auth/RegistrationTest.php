@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
+
 use function Pest\Laravel\assertAuthenticated;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
@@ -22,9 +24,18 @@ test('new users can register', function () {
 
     assertAuthenticated();
     $response->assertRedirect(route('dashboard', absolute: false));
+});
+
+test('new users can access the dashboard after registration', function () {
+    post('/register', [
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ]);
 
     $this->assertDatabaseCount('users', 1);
-    $user = \App\Models\User::query()->first();
+    $user = User::query()->first();
 
     $this->actingAs($user)
         ->get(route('dashboard'))
