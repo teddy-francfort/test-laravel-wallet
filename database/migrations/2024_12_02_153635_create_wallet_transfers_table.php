@@ -18,6 +18,7 @@ return new class extends Migration
 
             $table->foreignId('source_id')->constrained('wallets');
             $table->foreignId('target_id')->constrained('wallets');
+            $table->foreignId('recurring_transfer_id')->nullable()->constrained('wallet_recurring_transfers');
 
             $table->integer('amount')->unsigned();
 

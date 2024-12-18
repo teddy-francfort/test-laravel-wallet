@@ -25,6 +25,14 @@ class WalletRecurringTransfer extends Model
         'reason',
     ];
 
+    protected function casts()
+    {
+        return [
+            'start_date' => 'date',
+            'end_date' => 'date',
+        ];
+    }
+
     public function wallet(): BelongsTo
     {
         return $this->belongsTo(Wallet::class, 'source_id');

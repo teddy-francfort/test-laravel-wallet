@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,10 +20,11 @@ class WalletRecurringTransferFactory extends Factory
     public function definition(): array
     {
         return [
+            'source_id' => Wallet::factory(),
             'start_date' => now(),
             'end_date' => now()->addMonth(),
             'frequency' => 10,
-            'recipient_email' => 'test@test.com',
+            'recipient_email' => $this->faker->safeEmail(),
             'amount' => 10,
             'reason' => 'test reason',
         ];
