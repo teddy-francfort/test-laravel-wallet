@@ -9,6 +9,8 @@ use App\Jobs\ExecuteWalletRecurringTransfer;
 use App\Models\Wallet;
 use App\Models\WalletRecurringTransfer;
 use App\Models\WalletTransfer;
+use App\Notifications\BalanceInsufficientForRecurringTransferNotification;
+use Illuminate\Support\Facades\Notification;
 
 beforeEach(function () {
     $this->freezeTime();
@@ -59,7 +61,9 @@ it('fails if transfer is already made', function () {
     $this->assertEquals($this->recurringTransfer->getKey(), $this->recurringTransfer->transfers()->first()->recurring_transfer_id);
 });
 
-it('fails if wallet amount is not sufficient', function () {
+it('fails and user is notified if wallet amount is not sufficient', function () {
+    Notification::fake();
+
     $this->recurringTransfer->updateQuietly([
         'amount' => 200,
     ]);
@@ -78,6 +82,8 @@ it('fails if wallet amount is not sufficient', function () {
     $job->assertFailed();
     expect($job->job->failedWith)->toBeInstanceOf(InsufficientBalance::class);
     expect($this->recurringTransfer->transfers)->toHaveCount(0);
+    Notification::assertSentTimes(BalanceInsufficientForRecurringTransferNotification::class, 1);
+    Notification::assertSentTo($this->recurringTransfer->wallet->user, BalanceInsufficientForRecurringTransferNotification::class);
 });
 
 it('fails if recipient email is not found', function () {

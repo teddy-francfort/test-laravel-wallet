@@ -10,6 +10,7 @@ use App\Exceptions\RecipientEmailUserNotFoundException;
 use App\Models\User;
 use App\Models\WalletRecurringTransfer;
 use App\Models\WalletTransfer;
+use App\Notifications\BalanceInsufficientForRecurringTransferNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Carbon;
@@ -60,6 +61,7 @@ class ExecuteWalletRecurringTransfer implements ShouldQueue
                 walletRecurringTransfer: $this->walletRecurringTransfer
             );
         } catch (InsufficientBalance $insufficientBalanceException) {
+            $this->walletRecurringTransfer->wallet->user->notify(new BalanceInsufficientForRecurringTransferNotification($this->walletRecurringTransfer));
             $this->fail($insufficientBalanceException);
 
             return;
