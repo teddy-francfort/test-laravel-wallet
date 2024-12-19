@@ -7,6 +7,7 @@ namespace App\Actions;
 use App\Enums\WalletTransactionType;
 use App\Exceptions\InsufficientBalance;
 use App\Models\User;
+use App\Models\WalletRecurringTransfer;
 use App\Models\WalletTransfer;
 use Illuminate\Support\Facades\DB;
 
@@ -17,13 +18,14 @@ readonly class PerformWalletTransfer
     /**
      * @throws InsufficientBalance
      */
-    public function execute(User $sender, User $recipient, int $amount, string $reason): WalletTransfer
+    public function execute(User $sender, User $recipient, int $amount, string $reason, ?WalletRecurringTransfer $walletRecurringTransfer = null): WalletTransfer
     {
-        return DB::transaction(function () use ($sender, $recipient, $amount, $reason) {
+        return DB::transaction(function () use ($sender, $recipient, $amount, $reason, $walletRecurringTransfer) {
             $transfer = WalletTransfer::create([
                 'amount' => $amount,
                 'source_id' => $sender->wallet->id,
                 'target_id' => $recipient->wallet->id,
+                'recurring_transfer_id' => $walletRecurringTransfer?->getKey(),
             ]);
 
             $this->performWalletTransaction->execute(

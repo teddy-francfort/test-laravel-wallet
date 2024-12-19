@@ -29,4 +29,13 @@ class WalletRecurringTransferFactory extends Factory
             'reason' => 'test reason',
         ];
     }
+
+    public function walletBalance(int $balance): Factory
+    {
+        return $this->state(function (array $attributes) use ($balance) {
+            return [
+                'source_id' => Wallet::factory()->balance($balance),
+            ];
+        });
+    }
 }

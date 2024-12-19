@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class WalletRecurringTransfer extends Model
 {
@@ -36,5 +37,10 @@ class WalletRecurringTransfer extends Model
     public function wallet(): BelongsTo
     {
         return $this->belongsTo(Wallet::class, 'source_id');
+    }
+
+    public function transfers(): HasMany
+    {
+        return $this->hasMany(WalletTransfer::class, 'recurring_transfer_id', 'id');
     }
 }
